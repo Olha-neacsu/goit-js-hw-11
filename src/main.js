@@ -1,4 +1,6 @@
 import iziToast from 'izitoast';
+import "izitoast/dist/css/iziToast.min.css";
+
 import { fetchImages } from './js/pixabay-api';
 import { renderGallery } from './js/render-functions';
 
@@ -7,6 +9,7 @@ const gallery = document.querySelector('.gallery');
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
+
     const searchQuery = form.elements['search-text'].value.trim();
 
     if (searchQuery === '') {
@@ -23,7 +26,7 @@ form.addEventListener('submit', async (event) => {
         if (images.length === 0) {
             iziToast.info({
                 title: 'No results',
-                message: 'No images found. Try typing again.',
+                message: `No images found for "${searchQuery}".  Try again.`,
                 position: 'topRight',
             });
         }
@@ -31,7 +34,7 @@ form.addEventListener('submit', async (event) => {
     } catch (error) {
         iziToast.error({
             title: 'Error',
-            message: 'Something went wrong: ${error.message}',
+            message: `Something went wrong: ${error.message}`,
             position: 'topRight',
         });
     }
