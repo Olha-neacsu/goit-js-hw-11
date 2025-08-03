@@ -17,7 +17,7 @@ form.addEventListener('submit', async function handleSearch(event) {
     if (!query) {
         iziToast.info({
             title: 'Empty',
-            message: 'Type here to search',
+            message: 'Type something to search.',
             position: 'topRight',
         });
         return;
@@ -37,13 +37,15 @@ form.addEventListener('submit', async function handleSearch(event) {
                 message: `No images found for "${query}".  Try again.`,
                 position: 'topRight',
             });
+            input.value = '';
         } else {
-          createGallery(images);
+            createGallery(images);
+            input.value = '';
         }
     } catch (error) {
         iziToast.error({
             title: 'Error',
-            message: `Something went wrong: ${error.message}`,
+            message: `Something went wrong: ${error.message}.`,
             position: 'topRight',
         });
     } finally {

@@ -18,7 +18,8 @@ export function createGallery(images) {
         comments,
         downloads,
       }) => `
-    <a href="${largeImageURL}" class="gallery-item">
+      <li class="gallery-item">
+      <a href="${largeImageURL}" class="gallery-item">
       <div class="image-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
         <ul class="image-stats">
@@ -29,6 +30,7 @@ export function createGallery(images) {
         </ul>
       </div>
     </a>
+    </li>
   `
     )
     .join('');
