@@ -1,20 +1,21 @@
+import './css/styles.css';
+
 import iziToast from 'izitoast';
 import "izitoast/dist/css/iziToast.min.css";
 
-import { fetchImages } from './js/pixabay-api';
-import { renderGallery } from './js/render-functions';
+import { getImagesByQuery } from './js/pixabay-api';
+import { createGallery, clearGallery, showLoader, hideLoader } from './js/render-functions';
 
 const form = document.querySelector('.form');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
+const input = document.querySelector('.input');
 
-form.addEventListener('submit', async (event) => {
+form.addEventListener('submit', async function handleSearch(event) {
     event.preventDefault();
 
-    const searchQuery = form.elements['search-text'].value.trim();
+    const query = input.value.trim();
 
-    if (searchQuery === '') {
-        iziToast.warning({
+    if (!query) {
+        iziToast.info({
             title: 'Empty',
             message: 'Type here to search',
             position: 'topRight',
@@ -22,25 +23,23 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
-    gallery.innerHTML = '';
-    loader.hidden = false;
+    clearGallery();
+     showLoader();
 
     try {
-        loader.hidden = false;
+        const images = await getImagesByQuery(query);        
 
-        const images = await fetchImages(searchQuery);
-
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         if (images.length === 0) {
-            iziToast.info({
+            iziToast.warning({
                 title: 'No results',
-                message: `No images found for "${searchQuery}".  Try again.`,
+                message: `No images found for "${query}".  Try again.`,
                 position: 'topRight',
             });
+        } else {
+          createGallery(images);
         }
-
-        renderGallery(images, gallery);
     } catch (error) {
         iziToast.error({
             title: 'Error',
@@ -48,6 +47,6 @@ form.addEventListener('submit', async (event) => {
             position: 'topRight',
         });
     } finally {
-        loader.hidden = true;
+        hideLoader();
     }
 });

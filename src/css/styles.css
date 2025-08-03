@@ -1,23 +1,4 @@
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
-/* Common styles */
-@import url('./reset.css');
-@import url('./base.css');
-@import url('./container.css');
-@import url('./animations.css');
-
-/* Sections style */
-@import url('./header.css');
-@import url('./vite-promo.css');
-@import url('./badges.css');
-@import url('./back-link.css');
-@import url('./footer.css');
-
-body {
+*/ body {
   font-family: 'Montserrat', sans-serif;
   padding: 0;
 }
@@ -63,12 +44,8 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(
-    135deg,
-    #6b50ff,
-    #4e75ff
-  ); /* Reverse gradient on hover */
-  transform: scale(1.05); /* Slight zoom on hover */
+  background: linear-gradient(135deg, #6b50ff, #4e75ff);
+  transform: scale(1.05);
 }
 
 .gallery {
@@ -111,13 +88,21 @@ button:hover {
 }
 
 .loader {
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: 64px;
   height: 64px;
   background-color: rgba(0, 0, 0, 0.5);
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
   overflow: hidden;
+  z-index: 999;
 }
+
+.hidden {
+  display: none;
+}
+
 .loader:after {
   content: '';
   position: absolute;
@@ -125,14 +110,16 @@ button:hover {
   margin: auto;
   background: #222b32;
 }
+
 .loader:before {
   content: '';
   position: absolute;
   inset: -15px;
   margin: auto;
-  background: #de3500;
+  background: #eeee0a;
   animation: diamondLoader 2s linear infinite;
 }
+
 @keyframes diamondLoader {
   0%,
   10% {
