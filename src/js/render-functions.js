@@ -1,28 +1,36 @@
-export function renderGallery(images, container) {
-    const markup = images.map(image => {
-        const {
-            webformatURL,
-            largeImageURL,
-            tags,
-            likes,
-            views,
-            comments,
-            downloads,
-        } = image;
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
+let lightbox;
+
+export function renderGallery(images, container) {
+    container.innerHTML = '';
+
+    const markup = images.map(image => {
         return `
-        <li class="gallery-item">
-        <a href="${largeImageURL}" class="gallery-link">
-        <img src="${webformatURL}" alt="${tags}" class="gallery-image"/>
+        <a class="gallery-item" href="${image.largeImageURL}">
+          <div class="image-card">
+            <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" width="360"/>
+            <ul class="image-stats">
+              <li><b>Likes:</b> ${image.likes}</li>
+              <li><b>Views:</b> ${image.views}</li>
+              <li><b>Comments:</b> ${image.comments}</li>
+              <li><b>Downloads:</b> ${image.downloads}</li>
+            </ul>
+          </div>
         </a>
-        <div class="info">
-        <p><b>Likes:</b>${likes}</p>
-        <p><b>Views:</b>${views}</p>
-        <p><bComments:b>${comments}</p>
-        <p><b>Downloads:</b>${downloads}</p>
-        </div>
-        </li>`;
-    }).join('');
+      `;
+    })
+    .join('');
     
-    container.innerHTML = `<ul class="gallery-list">${markup}</ul>`;
+    container.innerHTML = markup;
+
+    if (!lightbox) {
+        lightbox = new SimpleLightbox('.gallery a', {
+            captionsData: 'alt',
+            captionDelay: 250,
+        });
+    } else {
+        lightbox.refresh();
+    }
 }

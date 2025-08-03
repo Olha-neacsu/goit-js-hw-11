@@ -6,6 +6,7 @@ import { renderGallery } from './js/render-functions';
 
 const form = document.querySelector('.form');
 const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.loader');
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -21,8 +22,16 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
+    gallery.innerHTML = '';
+    loader.hidden = false;
+
     try {
+        loader.hidden = false;
+
         const images = await fetchImages(searchQuery);
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
         if (images.length === 0) {
             iziToast.info({
                 title: 'No results',
@@ -30,6 +39,7 @@ form.addEventListener('submit', async (event) => {
                 position: 'topRight',
             });
         }
+
         renderGallery(images, gallery);
     } catch (error) {
         iziToast.error({
@@ -37,5 +47,7 @@ form.addEventListener('submit', async (event) => {
             message: `Something went wrong: ${error.message}`,
             position: 'topRight',
         });
+    } finally {
+        loader.hidden = true;
     }
 });
